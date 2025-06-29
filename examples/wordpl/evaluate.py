@@ -27,15 +27,17 @@ def evaluate(code_path):
     if result.returncode != 0:
         print(f"Error running the evaluation script: {result.stderr}")
         return {
-            "total_budget_score": -1000,
+            "minus_estimated_median_budget": -1e6,
             'validity': 0,
         }
     output = result.stdout.strip()
     try:
         result_dict = json.loads(output)
     except json.JSONDecodeError as e:
+        print(f"Error decoding JSON output: {e}")
+        print(f"Output was: {output}")
         return {
-            "total_budget_score": -1000,
+            "minus_estimated_median_budget": -1e6,
             'validity': 0,
         }
     return {

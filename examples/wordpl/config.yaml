@@ -1,14 +1,14 @@
 # Configuration for function minimization example
 max_iterations: 20
-checkpoint_interval: 1
+checkpoint_interval: 10
 log_level: "INFO"
 
 # LLM configuration
 llm:
   primary_model: "gemini-2.0-flash"
-  primary_model_weight: 0.6
-  secondary_model: "gemini-2.5-flash-preview-05-20"
-  secondary_model_weight: 0.4
+  primary_model_weight: 0.9
+  secondary_model: "gemini-2.5-pro"
+  secondary_model_weight: 0.1
   api_base: "https://generativelanguage.googleapis.com/v1beta/openai/"
   api_key: YOUR_API_KEY
   temperature: 0.7
@@ -18,10 +18,9 @@ llm:
 # Prompt configuration
 prompt:
   system_message: |
-    You are an expert programmer. Your task is to implement an algorithm for wordpl.
+    You are an expert programmer. Your task is to improve an algorithm for wordpl.
     The goal of each game is to find the secret word with the smallest possible privacy budget.
     The game selects a secret word at random among the words in answers.txt. The goal of the player is to find this secret word.
-
     Each round, the player can take one of two actions.
 
     Get clues: the player selects a five-letter word in valid.txt (the guess), and an epsilon value. The game then generates five clues — one per letter.
@@ -37,6 +36,8 @@ prompt:
 
     If the final guess is the secret word, the player wins. Their score is 1000 - negative the sum of all the epsilon values used in previous rounds.
     If the final guess is not the secret word, the player loses. Their score is (float('-inf')).
+    IMPORTANT: Make small changes, and make sure the code works. Prefer changes that does not change function signature or class members.
+    NEVER change more than 5 lines of code in a single iteration.
   num_top_programs: 3
   use_template_stochasticity: true
 
@@ -50,7 +51,7 @@ database:
 
 # Evaluator configuration
 evaluator:
-  timeout: 60
+  timeout: 600
   cascade_evaluation: false
   cascade_thresholds: [1.0]
   parallel_evaluations: 4
@@ -59,3 +60,4 @@ evaluator:
 # Evolution settings
 diff_based_evolution: true
 allow_full_rewrites: false
+max_code_length: 12000                # Maximum allowed code length in characters
